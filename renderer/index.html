@@ -1,6 +1,123 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Automação Planilhas</title><link rel="stylesheet" href="style.css"></head><body>
-<header><div><h1>WhatsApp → Planilha</h1><p>Automação Windows Portable</p></div><span class="version">v1.0.0</span></header>
-<main><section class="cards"><article><span>Motor</span><strong id="statusMotor">PARADO</strong></article><article><span>WhatsApp</span><strong id="statusWhats">DESCONHECIDO</strong></article><article><span>Planilha</span><strong id="statusSheet">AGUARDANDO</strong></article><article><span>Processadas</span><strong id="count">0</strong></article></section>
-<section class="actions"><button id="start" class="primary">INICIAR</button><button id="stop">PARAR</button><button id="openCfg">ABRIR CONFIGURAÇÃO</button></section>
-<section class="panel"><div class="panel-title"><h2>Configurações</h2><span>Salve com o motor parado</span></div><label>Apps Script URL<input id="appsUrl" type="text"></label><div class="row"><label>Aba da planilha<input id="aba" type="text"></label><label>Caminho do Chrome (opcional)<input id="chrome" type="text" placeholder="Deixe vazio para detectar automaticamente"></label></div><label>IDs dos grupos (um por linha)<textarea id="grupos" rows="4"></textarea></label><label class="check"><input id="diag" type="checkbox"> Ativar diagnóstico de grupos</label><button id="saveCfg">SALVAR CONFIGURAÇÕES</button></section>
-<section class="panel log-panel"><div class="panel-title"><h2>Log do sistema</h2><button id="clearLog" class="small">LIMPAR</button></div><pre id="log">Pronto para iniciar.</pre></section></main><script src="renderer.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Automação Planilhas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-mini">
+        <img src="../build/icon.png" alt="Ícone">
+      </div>
+      <button class="nav-btn active" data-view="dashboard"><span>⌂</span><small>Painel</small></button>
+      <button class="nav-btn" data-view="config"><span>⚙</span><small>Configurações</small></button>
+      <button class="nav-btn" data-view="logview"><span>▤</span><small>Log</small></button>
+      <button class="nav-btn" data-view="about"><span>ⓘ</span><small>Sobre</small></button>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div class="title-wrap">
+          <img src="../build/icon.png" alt="Ícone" class="app-icon">
+          <div>
+            <h1>Automação Planilhas</h1>
+            <p>WhatsApp → Planilhas Google</p>
+          </div>
+        </div>
+        <div class="top-status">
+          <span class="dot"></span>
+          <span>Chrome em segundo plano</span>
+          <strong>v1.0.2</strong>
+        </div>
+      </header>
+
+      <main>
+        <section id="dashboard" class="view active-view">
+          <div class="status-grid">
+            <article class="status-card">
+              <div><span>Status do WhatsApp</span><strong id="statusWhats">DESCONHECIDO</strong><small>Sessão do WhatsApp Web</small></div>
+              <div class="status-icon green">✓</div>
+            </article>
+            <article class="status-card">
+              <div><span>Status da Planilha</span><strong id="statusSheet">AGUARDANDO</strong><small>Conexão com Apps Script</small></div>
+              <div class="status-icon green">✓</div>
+            </article>
+            <article class="status-card">
+              <div><span>Status do Motor</span><strong id="statusMotor">PARADO</strong><small>Monitoramento dos grupos</small></div>
+              <div class="status-icon play">▶</div>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <article class="panel-card groups-card">
+              <div class="card-title">Grupos Monitorados</div>
+              <div id="groupList" class="group-list"></div>
+              <div class="total-groups" id="totalGroups">Total: 0 grupos</div>
+            </article>
+
+            <article class="panel-card summary-card">
+              <div class="card-title">Resumo Geral</div>
+              <div class="metric-row"><span>Mensagens processadas</span><strong id="count">0</strong></div>
+              <div class="metric-row"><span>Última atualização</span><b id="lastUpdate">--</b></div>
+              <div class="metric-row"><span>Vídeos processados</span><b id="videoCount">0</b></div>
+              <div class="metric-row"><span>Motor</span><b id="summaryMotor">PARADO</b></div>
+            </article>
+
+            <article class="panel-card news-card">
+              <div class="card-title">Última Notícia Processada</div>
+              <div class="news-field"><span>Título:</span><strong id="lastTitle">Nenhuma notícia processada ainda</strong></div>
+              <div class="news-two"><div><span>Veículo:</span><b id="lastVehicle">--</b></div><div><span>Data:</span><b id="lastDate">--</b></div></div>
+              <div class="news-two"><div><span>Assunto:</span><b id="lastSubject" class="tag blue">--</b></div><div><span>Análise:</span><b id="lastAnalysis" class="tag green-tag">--</b></div></div>
+              <div class="news-field"><span>Autor:</span><b id="lastAuthor">--</b></div>
+            </article>
+          </div>
+
+          <div class="control-bar">
+            <button id="start" class="control primary">▶ INICIAR</button>
+            <button id="stop" class="control danger">■ PARAR</button>
+            <button id="openLog" class="control">▤ ABRIR LOG</button>
+            <button id="openCfg" class="control">▰ ABRIR PASTA</button>
+          </div>
+          <div class="bottom-status"><span class="dot"></span><span id="bottomStatus">Sistema pronto para iniciar.</span><span class="bottom-version">Versão 1.0.2</span></div>
+        </section>
+
+        <section id="config" class="view">
+          <article class="panel-card large-card">
+            <div class="card-title">Configurações</div>
+            <p class="muted">Altere com o motor parado e clique em salvar.</p>
+            <label>Apps Script URL<input id="appsUrl" type="text"></label>
+            <div class="form-grid">
+              <label>Aba da planilha<input id="aba" type="text"></label>
+              <label>Caminho do Chrome (opcional)<input id="chrome" type="text" placeholder="Deixe vazio para detectar automaticamente"></label>
+            </div>
+            <label>IDs dos grupos (um por linha)<textarea id="grupos" rows="7"></textarea></label>
+            <label class="check"><input id="diag" type="checkbox"> Ativar diagnóstico de grupos</label>
+            <button id="saveCfg" class="control primary">SALVAR CONFIGURAÇÕES</button>
+          </article>
+        </section>
+
+        <section id="logview" class="view">
+          <article class="panel-card large-card log-card">
+            <div class="card-title row-title"><span>Log do Sistema</span><button id="clearLog" class="mini-btn">LIMPAR</button></div>
+            <pre id="log">Pronto para iniciar.</pre>
+          </article>
+        </section>
+
+        <section id="about" class="view">
+          <article class="panel-card large-card about-card">
+            <img src="../build/icon.png" alt="Ícone">
+            <h2>Automação Planilhas</h2>
+            <p>Windows Portable para monitorar grupos do WhatsApp, interpretar notícias e vídeos e enviar os dados automaticamente para o Google Planilhas.</p>
+            <p><strong>Versão 1.0.2</strong></p>
+            <p class="muted">Nesta versão, o Chrome roda oculto em segundo plano após a autenticação.</p>
+          </article>
+        </section>
+      </main>
+    </section>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>
