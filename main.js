@@ -9,7 +9,7 @@ let stats = { status:"PARADO", whatsapp:"DESCONHECIDO", planilha:"AGUARDANDO", p
 
 function baseDir(){ return process.env.PORTABLE_EXECUTABLE_DIR || (app.isPackaged ? path.dirname(process.execPath) : __dirname); }
 function configPath(){ return path.join(baseDir(), "config.json"); }
-function enginePath(){ return app.isPackaged ? path.join(process.resourcesPath,"engine","index.js") : path.join(__dirname,"engine","index.js"); }
+function enginePath(){ return app.isPackaged ? path.join(app.getAppPath(),"engine","index.js") : path.join(__dirname,"engine","index.js"); }
 function ensureConfig(){
   const target=configPath();
   if(!fs.existsSync(target)){
