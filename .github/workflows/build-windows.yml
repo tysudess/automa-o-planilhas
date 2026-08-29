@@ -28,21 +28,17 @@ jobs:
       - name: Gerar Windows Portable
         run: npm run dist
 
-      - name: Criar Release v1.0.0
+      - name: Criar Release v1.0.1
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
+          tag_name: v1.0.1
           target_commitish: main
-          name: Automação Planilhas Windows Portable v1.0.0
+          name: Automação Planilhas Windows Portable v1.0.1
           body: |
-            Primeira versão Windows Portable da automação WhatsApp → Google Planilhas.
+            Correção do Windows Portable.
 
-            - Interface gráfica
-            - Iniciar/Parar motor
-            - Status do WhatsApp e da planilha
-            - Log em tempo real
-            - Configuração dos grupos e Apps Script
-            - Suporte a notícias e vídeos
-            - Classificação automática de análise e assunto
-          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.0.0.exe
+            - Corrige erro "Cannot find module qrcode-terminal" ao clicar em INICIAR
+            - Empacota o motor junto com as dependências do aplicativo
+            - Mantém interface, grupos, Apps Script, notícias, vídeos e classificações da v1.0.0
+          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.0.1.exe
           make_latest: true
