@@ -1,6 +1,6 @@
 {
   "name": "automacao-planilhas",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Automação WhatsApp para Google Planilhas - Windows Portable",
   "main": "main.js",
   "author": "RODRIGODESS",
@@ -27,6 +27,7 @@
       "preload.js",
       "renderer/**/*",
       "engine/**/*",
+      "build/**/*",
       "package.json"
     ],
     "extraResources": [
@@ -36,6 +37,7 @@
       }
     ],
     "win": {
+      "icon": "build/icon.png",
       "target": [
         {
           "target": "portable",
