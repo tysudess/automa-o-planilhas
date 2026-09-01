@@ -30,25 +30,16 @@
         <div class="top-status">
           <span class="dot"></span>
           <span>Chrome em segundo plano</span>
-          <strong>v1.0.3</strong>
+          <strong>v1.0.4</strong>
         </div>
       </header>
 
       <main>
         <section id="dashboard" class="view active-view">
           <div class="status-grid">
-            <article class="status-card">
-              <div><span>Status do WhatsApp</span><strong id="statusWhats">DESCONHECIDO</strong><small>Sessão do WhatsApp Web</small></div>
-              <div class="status-icon green">✓</div>
-            </article>
-            <article class="status-card">
-              <div><span>Status da Planilha</span><strong id="statusSheet">AGUARDANDO</strong><small>Conexão com Apps Script</small></div>
-              <div class="status-icon green">✓</div>
-            </article>
-            <article class="status-card">
-              <div><span>Status do Motor</span><strong id="statusMotor">PARADO</strong><small>Monitoramento dos grupos</small></div>
-              <div class="status-icon play">▶</div>
-            </article>
+            <article class="status-card"><div><span>Status do WhatsApp</span><strong id="statusWhats">DESCONHECIDO</strong><small>Sessão do WhatsApp Web</small></div><div class="status-icon green">✓</div></article>
+            <article class="status-card"><div><span>Status da Planilha</span><strong id="statusSheet">AGUARDANDO</strong><small>Conexão com Apps Script</small></div><div class="status-icon green">✓</div></article>
+            <article class="status-card"><div><span>Status do Motor</span><strong id="statusMotor">PARADO</strong><small>Monitoramento dos grupos</small></div><div class="status-icon play">▶</div></article>
           </div>
 
           <div class="content-grid">
@@ -57,7 +48,6 @@
               <div id="groupList" class="group-list"></div>
               <div class="total-groups" id="totalGroups">Total: 0 grupos</div>
             </article>
-
             <article class="panel-card summary-card">
               <div class="card-title">Resumo Geral</div>
               <div class="metric-row"><span>Mensagens processadas</span><strong id="count">0</strong></div>
@@ -65,7 +55,6 @@
               <div class="metric-row"><span>Vídeos processados</span><b id="videoCount">0</b></div>
               <div class="metric-row"><span>Motor</span><b id="summaryMotor">PARADO</b></div>
             </article>
-
             <article class="panel-card news-card">
               <div class="card-title">Última Notícia Processada</div>
               <div class="news-field"><span>Título:</span><strong id="lastTitle">Nenhuma notícia processada ainda</strong></div>
@@ -81,7 +70,7 @@
             <button id="openLog" class="control">▤ ABRIR LOG</button>
             <button id="openCfg" class="control">▰ ABRIR PASTA</button>
           </div>
-          <div class="bottom-status"><span class="dot"></span><span id="bottomStatus">Sistema pronto para iniciar.</span><span class="bottom-version">Versão 1.0.3</span></div>
+          <div class="bottom-status"><span class="dot"></span><span id="bottomStatus">Sistema pronto para iniciar.</span><span class="bottom-version">Versão 1.0.4</span></div>
         </section>
 
         <section id="config" class="view">
@@ -93,27 +82,22 @@
               <label>Aba da planilha<input id="aba" type="text" value="Automática pela data da matéria" disabled></label>
               <label>Caminho do Chrome (opcional)<input id="chrome" type="text" placeholder="Deixe vazio para detectar automaticamente"></label>
             </div>
-            <p class="muted">A aba agora é escolhida automaticamente pela data: 31/08/2026 → AGO26, 01/09/2026 → SET26, 01/10/2026 → OUT26.</p>
+            <p class="muted">A aba é escolhida automaticamente pela data: 31/08/2026 → AGO26, 01/09/2026 → SET26, 01/10/2026 → OUT26.</p>
             <label>IDs dos grupos (um por linha)<textarea id="grupos" rows="7"></textarea></label>
             <label class="check"><input id="diag" type="checkbox"> Ativar diagnóstico de grupos</label>
             <button id="saveCfg" class="control primary">SALVAR CONFIGURAÇÕES</button>
           </article>
         </section>
 
-        <section id="logview" class="view">
-          <article class="panel-card large-card log-card">
-            <div class="card-title row-title"><span>Log do Sistema</span><button id="clearLog" class="mini-btn">LIMPAR</button></div>
-            <pre id="log">Pronto para iniciar.</pre>
-          </article>
-        </section>
+        <section id="logview" class="view"><article class="panel-card large-card log-card"><div class="card-title row-title"><span>Log do Sistema</span><button id="clearLog" class="mini-btn">LIMPAR</button></div><pre id="log">Pronto para iniciar.</pre></article></section>
 
         <section id="about" class="view">
           <article class="panel-card large-card about-card">
             <img src="../build/icon.png" alt="Ícone">
             <h2>Automação Planilhas</h2>
             <p>Windows Portable para monitorar grupos do WhatsApp, interpretar notícias e vídeos e enviar os dados automaticamente para o Google Planilhas.</p>
-            <p><strong>Versão 1.0.3</strong></p>
-            <p class="muted">Chrome oculto em segundo plano e seleção automática da aba mensal pela data da matéria.</p>
+            <p><strong>Versão 1.0.4</strong></p>
+            <p class="muted">Chrome oculto em segundo plano, seleção automática da aba mensal e novo ícone do aplicativo.</p>
           </article>
         </section>
       </main>
