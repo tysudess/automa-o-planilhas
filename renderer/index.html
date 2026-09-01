@@ -30,7 +30,7 @@
         <div class="top-status">
           <span class="dot"></span>
           <span>Chrome em segundo plano</span>
-          <strong>v1.0.2</strong>
+          <strong>v1.0.3</strong>
         </div>
       </header>
 
@@ -81,7 +81,7 @@
             <button id="openLog" class="control">▤ ABRIR LOG</button>
             <button id="openCfg" class="control">▰ ABRIR PASTA</button>
           </div>
-          <div class="bottom-status"><span class="dot"></span><span id="bottomStatus">Sistema pronto para iniciar.</span><span class="bottom-version">Versão 1.0.2</span></div>
+          <div class="bottom-status"><span class="dot"></span><span id="bottomStatus">Sistema pronto para iniciar.</span><span class="bottom-version">Versão 1.0.3</span></div>
         </section>
 
         <section id="config" class="view">
@@ -90,9 +90,10 @@
             <p class="muted">Altere com o motor parado e clique em salvar.</p>
             <label>Apps Script URL<input id="appsUrl" type="text"></label>
             <div class="form-grid">
-              <label>Aba da planilha<input id="aba" type="text"></label>
+              <label>Aba da planilha<input id="aba" type="text" value="Automática pela data da matéria" disabled></label>
               <label>Caminho do Chrome (opcional)<input id="chrome" type="text" placeholder="Deixe vazio para detectar automaticamente"></label>
             </div>
+            <p class="muted">A aba agora é escolhida automaticamente pela data: 31/08/2026 → AGO26, 01/09/2026 → SET26, 01/10/2026 → OUT26.</p>
             <label>IDs dos grupos (um por linha)<textarea id="grupos" rows="7"></textarea></label>
             <label class="check"><input id="diag" type="checkbox"> Ativar diagnóstico de grupos</label>
             <button id="saveCfg" class="control primary">SALVAR CONFIGURAÇÕES</button>
@@ -111,8 +112,8 @@
             <img src="../build/icon.png" alt="Ícone">
             <h2>Automação Planilhas</h2>
             <p>Windows Portable para monitorar grupos do WhatsApp, interpretar notícias e vídeos e enviar os dados automaticamente para o Google Planilhas.</p>
-            <p><strong>Versão 1.0.2</strong></p>
-            <p class="muted">Nesta versão, o Chrome roda oculto em segundo plano após a autenticação.</p>
+            <p><strong>Versão 1.0.3</strong></p>
+            <p class="muted">Chrome oculto em segundo plano e seleção automática da aba mensal pela data da matéria.</p>
           </article>
         </section>
       </main>
