@@ -56,7 +56,7 @@ function renderGroups(c){
 async function loadConfig(){
   currentConfig = await window.api.getConfig();
   $("appsUrl").value = currentConfig.appsScriptUrl || "";
-  $("aba").value = currentConfig.aba || "";
+  $("aba").value = "Automática pela data da matéria";
   $("chrome").value = currentConfig.chromePath || "";
   $("grupos").value = (currentConfig.grupos || []).join("\n");
   $("diag").checked = !!currentConfig.diagnosticoGrupos;
@@ -88,14 +88,15 @@ $("openLog").onclick = () => switchView("logview");
 $("openCfg").onclick = () => window.api.openConfigFolder();
 $("saveCfg").onclick = async () => {
   const cfg = {
+    ...currentConfig,
     appsScriptUrl: $("appsUrl").value.trim(),
-    aba: $("aba").value.trim(),
     chromePath: $("chrome").value.trim(),
     diagnosticoGrupos: $("diag").checked,
     grupos: $("grupos").value.split(/\r?\n/).map(x => x.trim()).filter(Boolean)
   };
+  delete cfg.aba;
   const r = await window.api.saveConfig(cfg);
-  addLog(r.ok ? "Configurações salvas." : "Falha ao salvar configurações.", !r.ok);
+  addLog(r.ok ? "Configurações salvas. Aba mensal: automática pela data da matéria." : "Falha ao salvar configurações.", !r.ok);
   if(r.ok){ currentConfig = cfg; renderGroups(cfg); }
 };
 $("clearLog").onclick = () => { log.textContent = ""; };
