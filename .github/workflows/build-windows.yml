@@ -28,23 +28,14 @@ jobs:
       - name: Gerar Windows Portable
         run: npm run dist
 
-      - name: Criar Release v1.0.2
+      - name: Criar Release v1.0.3
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.2
+          tag_name: v1.0.3
           target_commitish: main
-          name: Automação Planilhas Windows Portable v1.0.2
+          name: Automacao Planilhas Windows Portable v1.0.3
           body: |
-            Nova versão visual da Automação Planilhas.
-
-            - Chrome/WhatsApp Web executando oculto em segundo plano
-            - Novo layout escuro inspirado no painel aprovado
-            - Painel com status do WhatsApp, planilha e motor
-            - Lista dos grupos monitorados
-            - Resumo de mensagens e vídeos processados
-            - Área da última notícia processada
-            - Navegação lateral para Painel, Configurações, Log e Sobre
-            - Novo ícone do aplicativo
-            - Mantém notícias, vídeos, Apps Script e regras de classificação já aprovadas
-          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.0.2.exe
+            Versao com selecao automatica da aba mensal pela data da materia.
+            Mantem o Chrome oculto, o layout atual e as regras de classificacao.
+          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.0.3.exe
           make_latest: true
