@@ -28,18 +28,21 @@ jobs:
       - name: Gerar Windows Portable
         run: npm run dist
 
-      - name: Criar Release v1.0.4
+      - name: Criar Release v1.1.0
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.4
+          tag_name: v1.1.0
           target_commitish: main
-          name: Automacao Planilhas Windows Portable v1.0.4
+          name: Automacao Planilhas Windows Portable v1.1.0
           body: |
-            Versao com novo icone do aplicativo.
+            Versao com proxy corporativo configuravel dentro do programa.
 
-            - Novo icone mais limpo e legivel no Windows
+            - Proxy integrado ao Chrome/WhatsApp Web
+            - Proxy integrado ao envio para o Apps Script
+            - Proxy habilitado por padrao: proxy-7dn.mb:6060
+            - Campo de ativacao, servidor e porta na tela de Configuracoes
             - Mantem selecao automatica da aba mensal pela data da materia
             - Mantem Chrome oculto em segundo plano
             - Mantem layout, grupos, videos e regras de classificacao
-          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.0.4.exe
+          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.1.0.exe
           make_latest: true
