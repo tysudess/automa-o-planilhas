@@ -3,8 +3,7 @@ name: Build Windows Portable
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: write
@@ -12,37 +11,41 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-
       - name: Instalar dependências
         run: npm install
-
+      - name: Validar JavaScript
+        shell: pwsh
+        run: |
+          node --check main.js
+          node --check renderer/renderer.js
+          node --check engine/index.js
       - name: Gerar Windows Portable
         run: npm run dist
-
-      - name: Criar Release v1.1.0
+      - name: Criar Release v1.1.1
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.0
+          tag_name: v1.1.1
           target_commitish: main
-          name: Automacao Planilhas Windows Portable v1.1.0
+          name: Automacao Planilhas Windows Portable v1.1.1
           body: |
-            Versao com proxy corporativo configuravel dentro do programa.
+            Versao com melhorias de estabilidade, proxy e monitoramento.
 
-            - Proxy integrado ao Chrome/WhatsApp Web
-            - Proxy integrado ao envio para o Apps Script
-            - Proxy habilitado por padrao: proxy-7dn.mb:6060
-            - Campo de ativacao, servidor e porta na tela de Configuracoes
-            - Mantem selecao automatica da aba mensal pela data da materia
+            - Proxy integrado ao Chrome/WhatsApp Web e Apps Script
+            - Servidor padrao proxy-7dn.mb:6060
+            - Usuario e senha de proxy configuraveis na interface
+            - Reconexao automatica do WhatsApp Web
+            - Recuperacao automatica do motor apos encerramento inesperado
+            - Deteccao persistente de mensagens duplicadas
+            - Painel com contador de erros e ultima linha registrada
+            - Mantem selecao automatica da aba mensal pela data
             - Mantem Chrome oculto em segundo plano
-            - Mantem layout, grupos, videos e regras de classificacao
-          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.1.0.exe
+            - Mantem regras de noticias, videos e classificacao
+          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.1.1.exe
           make_latest: true
