@@ -30,7 +30,7 @@
         <div class="top-status">
           <span class="dot"></span>
           <span>Chrome em segundo plano</span>
-          <strong>v1.0.4</strong>
+          <strong>v1.1.0</strong>
         </div>
       </header>
 
@@ -70,7 +70,7 @@
             <button id="openLog" class="control">▤ ABRIR LOG</button>
             <button id="openCfg" class="control">▰ ABRIR PASTA</button>
           </div>
-          <div class="bottom-status"><span class="dot"></span><span id="bottomStatus">Sistema pronto para iniciar.</span><span class="bottom-version">Versão 1.0.4</span></div>
+          <div class="bottom-status"><span class="dot"></span><span id="bottomStatus">Sistema pronto para iniciar.</span><span class="bottom-version">Versão 1.1.0</span></div>
         </section>
 
         <section id="config" class="view">
@@ -82,7 +82,16 @@
               <label>Aba da planilha<input id="aba" type="text" value="Automática pela data da matéria" disabled></label>
               <label>Caminho do Chrome (opcional)<input id="chrome" type="text" placeholder="Deixe vazio para detectar automaticamente"></label>
             </div>
-            <p class="muted">A aba é escolhida automaticamente pela data: 31/08/2026 → AGO26, 01/09/2026 → SET26, 01/10/2026 → OUT26.</p>
+            <p class="muted">A aba é escolhida automaticamente pela data da matéria.</p>
+
+            <div class="card-title config-subtitle">Proxy</div>
+            <label class="check"><input id="proxyAtivo" type="checkbox"> Usar proxy</label>
+            <div class="form-grid">
+              <label>Servidor<input id="proxyHost" type="text" placeholder="proxy-7dn.mb"></label>
+              <label>Porta<input id="proxyPorta" type="number" placeholder="6060"></label>
+            </div>
+            <p class="muted">O mesmo proxy será usado pelo Chrome/WhatsApp Web e pelo envio para o Apps Script.</p>
+
             <label>IDs dos grupos (um por linha)<textarea id="grupos" rows="7"></textarea></label>
             <label class="check"><input id="diag" type="checkbox"> Ativar diagnóstico de grupos</label>
             <button id="saveCfg" class="control primary">SALVAR CONFIGURAÇÕES</button>
@@ -96,8 +105,8 @@
             <img src="../build/icon.png" alt="Ícone">
             <h2>Automação Planilhas</h2>
             <p>Windows Portable para monitorar grupos do WhatsApp, interpretar notícias e vídeos e enviar os dados automaticamente para o Google Planilhas.</p>
-            <p><strong>Versão 1.0.4</strong></p>
-            <p class="muted">Chrome oculto em segundo plano, seleção automática da aba mensal e novo ícone do aplicativo.</p>
+            <p><strong>Versão 1.1.0</strong></p>
+            <p class="muted">Proxy configurável, Chrome oculto em segundo plano e seleção automática da aba mensal.</p>
           </article>
         </section>
       </main>
