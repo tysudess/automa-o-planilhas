@@ -60,6 +60,12 @@ async function loadConfig(){
   $("chrome").value = currentConfig.chromePath || "";
   $("grupos").value = (currentConfig.grupos || []).join("\n");
   $("diag").checked = !!currentConfig.diagnosticoGrupos;
+
+  const proxy = currentConfig.proxy || {};
+  $("proxyAtivo").checked = proxy.ativo !== false;
+  $("proxyHost").value = proxy.host || "";
+  $("proxyPorta").value = proxy.porta || "";
+
   renderGroups(currentConfig);
 }
 
@@ -92,11 +98,16 @@ $("saveCfg").onclick = async () => {
     appsScriptUrl: $("appsUrl").value.trim(),
     chromePath: $("chrome").value.trim(),
     diagnosticoGrupos: $("diag").checked,
-    grupos: $("grupos").value.split(/\r?\n/).map(x => x.trim()).filter(Boolean)
+    grupos: $("grupos").value.split(/\r?\n/).map(x => x.trim()).filter(Boolean),
+    proxy: {
+      ativo: $("proxyAtivo").checked,
+      host: $("proxyHost").value.trim(),
+      porta: Number($("proxyPorta").value) || 0
+    }
   };
   delete cfg.aba;
   const r = await window.api.saveConfig(cfg);
-  addLog(r.ok ? "Configurações salvas. Aba mensal: automática pela data da matéria." : "Falha ao salvar configurações.", !r.ok);
+  addLog(r.ok ? "Configurações salvas. Aba mensal automática e proxy configurável." : "Falha ao salvar configurações.", !r.ok);
   if(r.ok){ currentConfig = cfg; renderGroups(cfg); }
 };
 $("clearLog").onclick = () => { log.textContent = ""; };
