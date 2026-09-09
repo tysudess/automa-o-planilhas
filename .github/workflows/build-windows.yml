@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: automacao-planilhas-build
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -14,12 +18,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
+
       - name: Instalar dependências
         run: npm install
+
       - name: Validar JavaScript
         shell: pwsh
         run: |
@@ -27,28 +35,30 @@ jobs:
           node --check preload.js
           node --check renderer/renderer.js
           node --check engine/index.js
+
       - name: Gerar Windows Portable
         run: npm run dist
-      - name: Criar Release v1.1.2
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.1.2
-          target_commitish: main
-          name: Automacao Planilhas Windows Portable v1.1.2
-          body: |
-            Versao com correcao de autenticacao do proxy e estabilidade.
 
-            - Proxy integrado ao Chrome/WhatsApp Web e Apps Script
-            - Servidor padrao proxy-7dn.mb:6060
-            - Usuario e senha do proxy configuraveis dentro do programa
-            - Autenticacao do proxy aplicada diretamente ao whatsapp-web.js
-            - Botao TESTAR PROXY na tela de configuracoes
-            - Indicador de status do proxy no painel
-            - Mensagens duplicadas persistidas em arquivo local somente apos sucesso
-            - Reconexao automatica do WhatsApp Web
-            - Recuperacao automatica do motor apos encerramento inesperado
-            - Contador de erros e ultima linha registrada
-            - Selecao automatica da aba mensal pela data
-            - Chrome oculto em segundo plano
-          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.1.2.exe
-          make_latest: true
+      - name: Conferir executável
+        shell: pwsh
+        run: |
+          $file = "dist/AutomacaoPlanilhas-Windows-Portable-v1.1.2.exe"
+          if (!(Test-Path $file)) { throw "Executável não encontrado: $file" }
+          $size = (Get-Item $file).Length
+          Write-Host "Executável gerado: $file"
+          Write-Host "Tamanho: $size bytes"
+
+      - name: Publicar Release v1.1.2
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $repo = "${{ github.repository }}"
+          $tag = "v1.1.2"
+          $file = "dist/AutomacaoPlanilhas-Windows-Portable-v1.1.2.exe"
+          $existing = gh release view $tag --repo $repo 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag já existe. Nenhuma nova publicação será criada."
+            exit 0
+          }
+          gh release create $tag $file --repo $repo --title "Automacao Planilhas Windows Portable v1.1.2" --notes "Correção da autenticação do proxy e melhorias de estabilidade.`n`n- Proxy configurável: proxy-7dn.mb:6060`n- Usuário e senha de proxy na interface`n- Teste do proxy na interface`n- Autenticação do proxy no WhatsApp Web`n- Reconexão automática`n- Recuperação do motor`n- Deduplicação persistente`n- Status detalhado e contador de erros`n- Aba mensal automática pela data" --latest
