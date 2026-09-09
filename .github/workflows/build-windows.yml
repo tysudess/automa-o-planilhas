@@ -24,28 +24,31 @@ jobs:
         shell: pwsh
         run: |
           node --check main.js
+          node --check preload.js
           node --check renderer/renderer.js
           node --check engine/index.js
       - name: Gerar Windows Portable
         run: npm run dist
-      - name: Criar Release v1.1.1
+      - name: Criar Release v1.1.2
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.1
+          tag_name: v1.1.2
           target_commitish: main
-          name: Automacao Planilhas Windows Portable v1.1.1
+          name: Automacao Planilhas Windows Portable v1.1.2
           body: |
-            Versao com melhorias de estabilidade, proxy e monitoramento.
+            Versao com correcao de autenticacao do proxy e estabilidade.
 
             - Proxy integrado ao Chrome/WhatsApp Web e Apps Script
             - Servidor padrao proxy-7dn.mb:6060
-            - Usuario e senha de proxy configuraveis na interface
+            - Usuario e senha do proxy configuraveis dentro do programa
+            - Autenticacao do proxy aplicada diretamente ao whatsapp-web.js
+            - Botao TESTAR PROXY na tela de configuracoes
+            - Indicador de status do proxy no painel
+            - Mensagens duplicadas persistidas em arquivo local somente apos sucesso
             - Reconexao automatica do WhatsApp Web
             - Recuperacao automatica do motor apos encerramento inesperado
-            - Deteccao persistente de mensagens duplicadas
-            - Painel com contador de erros e ultima linha registrada
-            - Mantem selecao automatica da aba mensal pela data
-            - Mantem Chrome oculto em segundo plano
-            - Mantem regras de noticias, videos e classificacao
-          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.1.1.exe
+            - Contador de erros e ultima linha registrada
+            - Selecao automatica da aba mensal pela data
+            - Chrome oculto em segundo plano
+          files: dist/AutomacaoPlanilhas-Windows-Portable-v1.1.2.exe
           make_latest: true
