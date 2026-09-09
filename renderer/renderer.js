@@ -24,6 +24,8 @@ function showStatus(s){
   $("summaryMotor").textContent = motor;
   $("count").textContent = s.processadas ?? 0;
   $("videoCount").textContent = s.videos ?? 0;
+  $("errorCount").textContent = s.erros ?? 0;
+  $("lastLine").textContent = s.ultimaLinha || "--";
   $("lastUpdate").textContent = s.ultimaAtualizacao || "--";
   $("bottomStatus").textContent = motor === "RODANDO" ? "Sistema iniciado e monitorando..." : motor === "PARADO" ? "Sistema pronto para iniciar." : `Sistema: ${motor}`;
 
@@ -65,6 +67,8 @@ async function loadConfig(){
   $("proxyAtivo").checked = proxy.ativo !== false;
   $("proxyHost").value = proxy.host || "";
   $("proxyPorta").value = proxy.porta || "";
+  $("proxyUsuario").value = proxy.usuario || "";
+  $("proxySenha").value = proxy.senha || "";
 
   renderGroups(currentConfig);
 }
@@ -78,20 +82,13 @@ function switchView(viewId){
   if(btn) btn.classList.add("active");
 }
 
-document.querySelectorAll(".nav-btn").forEach(btn => {
-  btn.addEventListener("click", () => switchView(btn.dataset.view));
-});
+document.querySelectorAll(".nav-btn").forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
 
-$("start").onclick = async () => {
-  const r = await window.api.start();
-  if(r.message) addLog(r.message);
-};
-$("stop").onclick = async () => {
-  const r = await window.api.stop();
-  if(r.message) addLog(r.message);
-};
+$("start").onclick = async () => { const r = await window.api.start(); if(r.message) addLog(r.message); };
+$("stop").onclick = async () => { const r = await window.api.stop(); if(r.message) addLog(r.message); };
 $("openLog").onclick = () => switchView("logview");
 $("openCfg").onclick = () => window.api.openConfigFolder();
+
 $("saveCfg").onclick = async () => {
   const cfg = {
     ...currentConfig,
@@ -102,20 +99,18 @@ $("saveCfg").onclick = async () => {
     proxy: {
       ativo: $("proxyAtivo").checked,
       host: $("proxyHost").value.trim(),
-      porta: Number($("proxyPorta").value) || 0
+      porta: Number($("proxyPorta").value) || 0,
+      usuario: $("proxyUsuario").value.trim(),
+      senha: $("proxySenha").value
     }
   };
   delete cfg.aba;
   const r = await window.api.saveConfig(cfg);
-  addLog(r.ok ? "Configurações salvas. Aba mensal automática e proxy configurável." : "Falha ao salvar configurações.", !r.ok);
+  addLog(r.ok ? "Configurações salvas. Proxy e credenciais serão usados pelo motor." : "Falha ao salvar configurações.", !r.ok);
   if(r.ok){ currentConfig = cfg; renderGroups(cfg); }
 };
-$("clearLog").onclick = () => { log.textContent = ""; };
 
+$("clearLog").onclick = () => { log.textContent = ""; };
 window.api.onStatus(showStatus);
 window.api.onLog(({line,isErr}) => addLog(line,isErr));
-
-(async () => {
-  showStatus(await window.api.getStatus());
-  await loadConfig();
-})();
+(async () => { showStatus(await window.api.getStatus()); await loadConfig(); })();
