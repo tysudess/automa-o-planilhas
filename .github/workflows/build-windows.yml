@@ -5,16 +5,12 @@ on:
   push:
     branches: [main]
 
-concurrency:
-  group: automacao-planilhas-build
-  cancel-in-progress: true
-
 permissions:
   contents: write
 
 jobs:
   build:
-    runs-on: windows-2022
+    runs-on: windows-latest
     timeout-minutes: 30
     steps:
       - name: Checkout
@@ -24,9 +20,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
 
       - name: Instalar dependências
+        shell: pwsh
         run: npm install --no-audit --no-fund
 
       - name: Validar JavaScript
@@ -38,13 +34,18 @@ jobs:
           node --check engine/index.js
 
       - name: Gerar Windows Portable
+        shell: pwsh
         run: npm run dist
 
       - name: Conferir executável
         shell: pwsh
         run: |
           $file = "dist/AutomacaoPlanilhas-Windows-Portable-v1.1.2.exe"
-          if (!(Test-Path $file)) { throw "Executável não encontrado: $file" }
+          if (!(Test-Path $file)) {
+            Write-Host "Arquivos encontrados em dist:"
+            Get-ChildItem dist -ErrorAction SilentlyContinue | Select-Object Name,Length
+            throw "Executável não encontrado: $file"
+          }
           $size = (Get-Item $file).Length
           if ($size -lt 10000000) { throw "Executável com tamanho inesperado: $size bytes" }
           Write-Host "Executável gerado: $file ($size bytes)"
@@ -57,9 +58,12 @@ jobs:
           $repo = "${{ github.repository }}"
           $tag = "v1.1.2"
           $file = "dist/AutomacaoPlanilhas-Windows-Portable-v1.1.2.exe"
-          gh release view $tag --repo $repo 2>$null
+          $exists = gh release view $tag --repo $repo 2>$null
           if ($LASTEXITCODE -eq 0) {
-            Write-Host "Release $tag já existe."
+            Write-Host "Release $tag já existe. Atualizando o arquivo."
+            gh release upload $tag $file --repo $repo --clobber
+            if ($LASTEXITCODE -ne 0) { throw "Falha ao atualizar o asset da Release $tag" }
             exit 0
           }
           gh release create $tag $file --repo $repo --title "Automacao Planilhas Windows Portable v1.1.2" --notes "Correção da autenticação do proxy e melhorias de estabilidade.`n`n- Proxy configurável: proxy-7dn.mb:6060`n- Usuário e senha na interface`n- TESTAR PROXY`n- Autenticação do proxy no WhatsApp Web`n- Reconexão automática`n- Recuperação automática do motor`n- Deduplicação persistente`n- Status detalhado e contador de erros`n- Aba mensal automática pela data"
+          if ($LASTEXITCODE -ne 0) { throw "Falha ao criar a Release $tag" }
