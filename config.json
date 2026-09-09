@@ -3,6 +3,11 @@
   "aba": "AGO26",
   "diagnosticoGrupos": false,
   "chromePath": "",
+  "proxy": {
+    "ativo": true,
+    "host": "proxy-7dn.mb",
+    "porta": 6060
+  },
   "grupos": [
     "556191047689-1555547406@g.us",
     "120363025807487932@g.us",
