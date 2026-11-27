@@ -156,6 +156,11 @@ if (proxyArg) chromeArgs.push(proxyArg);
 
 const clientOptions = {
   authStrategy: new LocalAuth({ clientId:"monitor-planilha" }),
+  // Não reutiliza HTML de uma versão anterior do WhatsApp Web. Isso evita que
+  // uma cópia antiga/incompatível da página deixe WAWebSocketModel.Socket nulo.
+  webVersionCache: { type: "none" },
+  // Dá mais tempo para o WhatsApp Web carregar os módulos em redes corporativas.
+  authTimeoutMs: 60000,
   puppeteer: { headless:true, ...(navegador ? { executablePath:navegador } : {}), args:chromeArgs }
 };
 if (PROXY_USUARIO) {
@@ -167,9 +172,12 @@ const client = new Client(clientOptions);
 client.on("qr", qr => { console.log("\nLeia o QR Code:\n"); qrcode.generate(qr,{small:true}); });
 client.on("authenticated", () => console.log("WhatsApp autenticado."));
 client.on("loading_screen", (percent, message) => console.log(`WhatsApp carregando: ${percent}% ${message || ""}`));
-client.on("ready", () => {
+client.on("ready", async () => {
+  let versao = "não identificada";
+  try { versao = await client.getWWebVersion(); } catch (_) {}
   console.log("\n====================================");
   console.log("SISTEMA ATIVO");
+  console.log("VERSÃO DO WHATSAPP WEB:", versao);
   console.log("====================================");
   console.log("WhatsApp conectado em segundo plano.");
   if (PROXY_USUARIO) console.log("Autenticação do proxy aplicada ao WhatsApp Web.");
